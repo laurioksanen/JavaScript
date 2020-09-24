@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Workshop 2</title>
+		<style>
+			body {
+				font-family: "Trebuchet MS", Helvetica, sans-serif;
+				color: #333333;
+			}
+		</style>
+		
+</head>
+
+<body>
+    <picture id="randomKuva">
+       
+
+    </picture>
+
+
+<h1 id="otsikko">
+</h1>
+
+</div>
+</body>
+<script>
+    var images =[
+"http://farm4.staticflickr.com/3691/11268502654_f28f05966c_m.jpg", 
+"http://farm1.staticflickr.com/33/45336904_1aef569b30_n.jpg", 
+"http://farm6.staticflickr.com/5211/5384592886_80a512e2c9.jpg"
+];
+
+    
+    if(confirm("Oletko opiskelija?")) {
+        document.getElementById("otsikko").innerHTML="Welcome student"
+    }   else {
+        document.getElementById("otsikko").innerHTML="Sorry, this page is for students only"
+        }
+        function kuva(){
+    var i = Math.round(Math.random()*2);
+    var photo = images[i];
+   return photo;
+
+    }
+    
+    var photo = kuva();
+
+    document.getElementById("randomKuva").innerHTML="<img src="+photo+"/>";
+    
+
+
+
+        
+</script>
+
+
+</html>
