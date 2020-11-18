@@ -408,13 +408,66 @@ function loadJSONDocWithParse() {
       
   
       document.getElementById("rawdata").innerHTML=table;
-
-      console.log(document.getElementById("rawdata").innerHTML)
     
 
 }
 
+function saaTiedot(x) {
+  if(x == 'x') {
+    var url= "http://api.openweathermap.org/data/2.5/weather?q=Helsinki&appid=0b3b10ced3c6aaebd87f676f62aa34a6";
+    var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+            xmlhttp.onreadystatechange = function() {
+                if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var jsonSaa = JSON.parse(xmlhttp.responseText);
+                    var icon = "http://openweathermap.org/img/wn/"+jsonSaa.weather[0].icon+"@2x.png";
+                    var tiedot = "<p>Helsinki<br><img src="+icon+"><br> Temperature: " + (jsonSaa.main.temp - 273.15).toFixed(1) +"°C<br>Clouds: "+jsonSaa.clouds.all+"%<br>Humidity: "+jsonSaa.main.humidity+"%</p>"
+                    //var lista = "<dl> <dt>Helsinki</dt><img src="+icon+"><dd></dd><dt>Temperature:</dt><dd>" + (jsonSaa.main.temp - 273.15).toFixed(1) + "°C</dd><dt>Clouds:</dt><dd>"+jsonSaa.clouds.all+"%</dd><dt>Humidity:</dt><dd>"+jsonSaa.main.humidity+"%</dd></dl>";
+                    document.getElementById("weatherdata").innerHTML = tiedot;
+                }
 
+    }
+  } else if(x == 'y') {
+    var city = document.getElementById("city").value;
+    var url= "http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=0b3b10ced3c6aaebd87f676f62aa34a6";
+    
+    var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+            xmlhttp.onreadystatechange = function() {
+                if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var jsonSaa = JSON.parse(xmlhttp.responseText);
+                    var icon = "http://openweathermap.org/img/wn/"+jsonSaa.weather[0].icon+"@2x.png";
+                    var tiedot = "<p>"+city+":<br><img src="+icon+"><br> Temperature: " + (jsonSaa.main.temp - 273.15).toFixed(1) +"°C<br>Clouds: "+jsonSaa.clouds.all+"%<br>Humidity: "+jsonSaa.main.humidity+"%</p>"
+                    //var lista = "<dl> <dt>Helsinki</dt><img src="+icon+"><dd></dd><dt>Temperature:</dt><dd>" + (jsonSaa.main.temp - 273.15).toFixed(1) + "°C</dd><dt>Clouds:</dt><dd>"+jsonSaa.clouds.all+"%</dd><dt>Humidity:</dt><dd>"+jsonSaa.main.humidity+"%</dd></dl>";
+                    document.getElementById("weatherdata").innerHTML = tiedot;
+                }
+       }
+  } else if (x=='n') {
+    var city = document.getElementById("citysearch").value;
+    var url= "http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=0b3b10ced3c6aaebd87f676f62aa34a6";
+    var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+            var a = 1;
+            xmlhttp.onreadystatechange = function() {
+                if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var jsonSaa = JSON.parse(xmlhttp.responseText);
+                    var icon = "http://openweathermap.org/img/wn/"+jsonSaa.weather[0].icon+"@2x.png";
+                    var tiedot = "<p>"+city+":<br><img src="+icon+"><br> Temperature: " + (jsonSaa.main.temp - 273.15).toFixed(1) +"°C<br>Clouds: "+jsonSaa.clouds.all+"%<br>Humidity: "+jsonSaa.main.humidity+"%</p>"
+                    //var lista = "<dl> <dt>Helsinki</dt><img src="+icon+"><dd></dd><dt>Temperature:</dt><dd>" + (jsonSaa.main.temp - 273.15).toFixed(1) + "°C</dd><dt>Clouds:</dt><dd>"+jsonSaa.clouds.all+"%</dd><dt>Humidity:</dt><dd>"+jsonSaa.main.humidity+"%</dd></dl>";
+                    document.getElementById("weatherdata").innerHTML = tiedot;
+                    document.getElementById("citysearch").value ="";
+                } else {
+                  document.getElementById("weatherdata").innerHTML = "Kaupunkia ei löytynyt";
+                  document.getElementById("citysearch").value =""
+                }
+  }
+
+  }
+
+}
 
 
 </script>
@@ -471,19 +524,19 @@ Your task is to write a Weather APP, which will display the weather information 
 <p>Sample call to the REST API could be like this: <a href="http://api.openweathermap.org/data/2.5/weather?q=Helsinki&units=metric&mode=JSON&APPID=ff64c247a136f706923d1ee0d55d71e2">http://api.openweathermap.org/data/2.5/weather?q=Helsinki&units=metric&mode=JSON&APPID=ff64c247a136f706923d1ee0d55d71e2">
 </a>. Click to see the response.</p>
 
-<li>First develop the app to display raw weather information (Temperature, Clouds, Humidity, Icon) on one spesific city, when the button is clicked. <button>Get data</button> </li>
+<li>First develop the app to display raw weather information (Temperature, Clouds, Humidity, Icon) on one spesific city, when the button is clicked. <button onclick="saaTiedot('x')">Get data</button> </li>
 <li>When you achieve this, then parse the data and output it to div</li>
 <li>When you have achieved this, implement an onchange-event on the pulldown menu, which will allow the user to select which city's data will be shown from a list of cities</li>
 <li>When you have completed this, add functionality to an input field, in which the user can write search queries which are sent to the OpenWeatherMap API and the system will run a search query which is retuned to your app.</li>
   <p>Select a city from the list:
-  <select name="mySelect" id="city" onchange="">
+  <select name="mySelect" id="city" onchange="saaTiedot('y')">
     <option value="Helsinki">Helsinki</option>
     <option value="Stockholm">Stockholm</option>
     <option value="Rome">Rome</option>
     <option value="New York">New York</option>
   </select>
 <br/>
-Or type in a search query: <input id="citysearch"></input><button id="search">Search</button>
+Or type in a search query: <input id="citysearch"></input><button id="search"onclick="saaTiedot('n')">Search</button>
 <div id="weatherdata">Weatherdata goes here.</div>
 
   <br>
